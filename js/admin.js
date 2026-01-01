@@ -1,34 +1,48 @@
 // 🛒 Add Product Function
 function addProduct() {
+  console.log("Add Product clicked");
+
   const name = document.getElementById("pname").value;
   const price = document.getElementById("price").value;
   const desc = document.getElementById("desc").value;
-  const sizes = document.getElementById("sizes").value.split(",");
-  const imgInput = document.getElementById("image");
+  const sizesInput = document.getElementById("sizes").value;
+  const imageInput = document.getElementById("image");
 
-  if (!name || !price || !imgInput.files[0]) {
-    alert("Fill all fields");
+  if (!name || !price || !desc || !sizesInput || !imageInput.files[0]) {
+    alert("Please fill all fields");
     return;
   }
 
+  const sizes = sizesInput.split(",");
+
   const reader = new FileReader();
+
   reader.onload = function () {
     let products = JSON.parse(localStorage.getItem("products")) || [];
 
-    products.push({
+    const product = {
       id: Date.now(),
-      name,
+      name: name,
       price: Number(price),
-      desc,
-      sizes,
+      desc: desc,
+      sizes: sizes,
       image: reader.result
-    });
+    };
 
+    products.push(product);
     localStorage.setItem("products", JSON.stringify(products));
-    alert("Product added successfully");
+
+    alert("✅ Product added successfully");
+
+    // Clear form
+    document.getElementById("pname").value = "";
+    document.getElementById("price").value = "";
+    document.getElementById("desc").value = "";
+    document.getElementById("sizes").value = "";
+    document.getElementById("image").value = "";
   };
 
-  reader.readAsDataURL(imgInput.files[0]);
+  reader.readAsDataURL(imageInput.files[0]);
 }
 
 
