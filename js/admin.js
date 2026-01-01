@@ -1,38 +1,36 @@
 // 🛒 Add Product Function
 function addProduct() {
-  console.log("addProduct called");
-
-  const nameInput = document.getElementById("name");
-  const priceInput = document.getElementById("price");
-  const imageInput = document.getElementById("image");
+  const name = document.getElementById("pname").value;
+  const price = document.getElementById("price").value;
   const desc = document.getElementById("desc").value;
-const sizes = document.getElementById("sizes").value.split(",");
+  const sizes = document.getElementById("sizes").value.split(",");
+  const imgInput = document.getElementById("image");
 
-  const msg = document.getElementById("msg");
-
-  if (!nameInput || !priceInput || !imageInput) {
-    alert("Input fields not found");
-    return;
-  }
-
-  const name = nameInput.value.trim();
-  const price = priceInput.value.trim();
-  const file = imageInput.files[0];
-
-  if (name === "" || price === "" || !file) {
-    alert("Please fill all fields");
+  if (!name || !price || !imgInput.files[0]) {
+    alert("Fill all fields");
     return;
   }
 
   const reader = new FileReader();
+  reader.onload = function () {
+    let products = JSON.parse(localStorage.getItem("products")) || [];
 
-  reader.onload = function (event) {
-    const productData = {
-      name: name,
-      price: price,
-      image: event.target.result,
-      createdAt: Date.now()
-    };
+    products.push({
+      id: Date.now(),
+      name,
+      price: Number(price),
+      desc,
+      sizes,
+      image: reader.result
+    });
+
+    localStorage.setItem("products", JSON.stringify(products));
+    alert("Product added successfully");
+  };
+
+  reader.readAsDataURL(imgInput.files[0]);
+}
+
 
     firebase.database().ref("products").push(productData)
       .then(() => {
