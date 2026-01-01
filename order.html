@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Your Cart | Marhaba Kids Wear</title>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
+<h2>🛒 Your Cart</h2>
+
+<div id="cart"></div>
+
+<h3>Customer Details</h3>
+<input id="cname" placeholder="Your Name"><br>
+<input id="phone" placeholder="Mobile Number"><br>
+<input id="address" placeholder="Address"><br><br>
+
+<h3>Payment Method</h3>
+<select id="payment">
+  <option value="COD">Cash on Delivery</option>
+  <option value="UPI">UPI (GPay / PhonePe)</option>
+</select>
+
+<br><br>
+<button onclick="confirmOrder()">
+  <i class="fa-solid fa-circle-check"></i> Confirm Order
+</button>
+
+<!-- 🔥 FIREBASE (REQUIRED) -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+<!-- 🔥 YOUR FIREBASE CONFIG -->
+<script src="js/firebase.js"></script>
+
+<!-- 🔥 ORDER LOGIC -->
+<script src="js/order.js"></script>
+
+<footer class="footer">
+  <p>
+    © 2025 Marhaba Kids Wear |
+    Developed by <strong>Mohammed Tabran</strong>
+  </p>
+</footer>
+
+</body>
+</html>
+

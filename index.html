@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Marhaba Kids Wear | Banswara</title>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
+</head>
+<body>
+
+  <header>
+    <h1>🛍️ Marhaba Kids Wear</h1>
+    <p>Nai Abadi, Banswara (RJ)</p>
+    <p>📞 7972174183</p>
+    <script>
+  const customer = JSON.parse(localStorage.getItem("customer"));
+</script>
+
+<div>
+  <script>
+    if (customer) {
+      document.write(`
+        Welcome, ${customer.name}
+        <button onclick="customerLogout()">Logout</button>
+      `);
+    } else {
+      document.write(`
+        <a href="customer-login.html"><button>Login</button></a>
+        <a href="customer-register.html"><button>Register</button></a>
+      `);
+    }
+  </script>
+</div>
+
+  <a href="order.html">
+  <button class="cart-icon">
+    <i class="fa-solid fa-cart-shopping"></i> View Cart
+  </button>
+</a>
+
+
+  </header>
+
+  <h2>Kids Collection</h2>
+
+  <div id="product-list"></div>
+
+  <!-- Firebase v8 -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+  <!-- Your JS -->
+  <script src="js/firebase.js"></script>
+  <script src="js/product.js"></script>
+<footer class="footer">
+  <p>
+    © 2025 Marhaba Kids Wear |
+    Developed by <strong>Mohammed Tabran</strong>
+  </p>
+</footer>
+
+</body>
+</html>

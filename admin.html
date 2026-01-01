@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel | Marhaba Kids Wear</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+<body>
+<script>
+  if (localStorage.getItem("adminLoggedIn") !== "true") {
+    window.location.href = "login.html";
+  }
+</script>
+
+  <h1>🛍️ Marhaba Kids Wear – Admin Panel</h1>
+  <p>Add new products to your shop</p>
+
+  <div class="admin-box">
+
+    <input type="text" id="name" placeholder="Product Name">
+
+    <input type="number" id="price" placeholder="Price (₹)">
+
+    <input type="file" id="image" accept="image/*">
+
+    <button onclick="addProduct()">Add Product</button>
+
+    <p id="msg"></p>
+
+  </div>
+<h2>Manage Products</h2>
+<div id="adminProducts"></div>
+<h2>Admin Dashboard – Orders</h2>
+
+<table border="1" width="100%" cellpadding="10">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Customer</th>
+      <th>Phone</th>
+      <th>Address</th>
+      <th>Items</th>
+      <th>Total</th>
+      <th>Payment</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody id="ordersTable"></tbody>
+</table>
+
+<br>
+<button onclick="clearOrders()">Clear All Orders</button>
+
+
+
+<script src="js/admin.js"></script>
+
+
+<script src="js/orders.js"></script>
+
+  <!-- Firebase CDN (VERSION 8 – IMPORTANT) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+  <!-- Your JS Files -->
+  <script src="js/firebase.js"></script>
+  <script src="js/admin.js"></script>
+<footer class="footer">
+  <p>
+    © 2025 Marhaba Kids Wear |
+    Developed by <strong>Mohammed Tabran</strong>
+  </p>
+</footer>
+
+</body>
+</html>
