@@ -1,0 +1,180 @@
+/* 🌈 Global */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #fff6e5;
+  color: #333;
+  text-align: center;
+}
+
+/* 🔝 Header */
+header {
+  background: linear-gradient(135deg, #ff8c00, #ff3d00);
+  color: white;
+  padding: 20px;
+  animation: slideDown 1s ease;
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* 📦 Product Grid */
+#product-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+/* 🧸 Product Card */
+.product-card {
+  background: white;
+  border-radius: 15px;
+  padding: 12px;
+  box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 20px rgba(0,0,0,0.25);
+}
+
+.product-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* 🏷️ Price */
+.price {
+  font-size: 18px;
+  font-weight: bold;
+  color: #e65100;
+}
+
+/* 🛒 Button */
+button {
+  background: #ff6f00;
+  border: none;
+  padding: 10px 16px;
+  color: white;
+  font-size: 15px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: #e65100;
+}
+
+/* 🛠 Admin Panel */
+.admin-box {
+  background: white;
+  width: 300px;
+  margin: 30px auto;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+.admin-box input {
+  width: 90%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+/* 📱 Mobile Friendly */
+@media (max-width: 600px) {
+  header h1 {
+    font-size: 22px;
+  }
+}
+/* 👨‍💻 Developer Footer */
+.footer {
+  margin-top: 40px;
+  padding: 15px;
+  background: #222;
+  color: #fff;
+  font-size: 14px;
+}
+
+.footer strong {
+  color: #ff9800;
+}
+button {
+  animation: bounceIn 0.8s ease;
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  60% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.product-card {
+  animation: floatUp 0.7s ease;
+}
+
+@keyframes floatUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.product-card:hover {
+  box-shadow: 0 0 15px rgba(255, 153, 0, 0.7);
+}
+.cart-icon {
+  animation: shake 1.5s infinite;
+}
+
+@keyframes shake {
+  0% { transform: rotate(0); }
+  25% { transform: rotate(5deg); }
+  50% { transform: rotate(-5deg); }
+  75% { transform: rotate(5deg); }
+  100% { transform: rotate(0); }
+}
+header h1 {
+  animation: slideColor 2s infinite alternate;
+}
+
+@keyframes slideColor {
+  from { color: #fff; }
+  to { color: #ffeb3b; }
+}
+.cart-item {
+  display: flex;
+  gap: 15px;
+  margin: 15px 0;
+}
+
+.cart-img {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.qty-box button {
+  padding: 5px 10px;
+  margin: 0 5px;
+}
+
+.delete-btn {
+  background: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
