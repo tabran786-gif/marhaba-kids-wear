@@ -1,68 +1,45 @@
-function saveOrder(order) {
-  let orders = JSON.parse(localStorage.getItem("orders")) || [];
-  orders.push(order);
-  localStorage.setItem("orders", JSON.stringify(orders));
-}
-
 const cartDiv = document.getElementById("cart");
 
-// Load cart on page load
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 function renderCart() {
   if (cart.length === 0) {
-    cartDiv.innerHTML = "<p>Your cart is empty.</p>";
+    cartDiv.innerHTML = "<p>Your cart is empty</p>";
     return;
   }
 
-  let html = "";
   let total = 0;
+  cartDiv.innerHTML = "";
 
   cart.forEach((item, index) => {
     const itemTotal = item.price * item.qty;
     total += itemTotal;
 
-    html += `
+    cartDiv.innerHTML += `
       <div class="cart-item">
-        <img src="${item.image}" class="cart-img">
-        <div class="cart-info">
+        <img src="${item.image}" width="80">
+        <div>
           <h4>${item.name}</h4>
           <p>₹${item.price}</p>
-
-          <div class="qty-box">
-            <button onclick="changeQty(${index}, -1)">−</button>
-            <span>${item.qty}</span>
-            <button onclick="changeQty(${index}, 1)">+</button>
-          </div>
-
-          <p><strong>Item Total: ₹${itemTotal}</strong></p>
-          <button class="delete-btn" onclick="removeItem(${index})">Remove</button>
+          <p>Qty: ${item.qty}</p>
+          <button onclick="removeItem(${index})">Remove</button>
         </div>
       </div>
       <hr>
     `;
   });
 
-  html += `<h3>Total Amount: ₹${total}</h3>`;
-  cartDiv.innerHTML = html;
-
-  localStorage.setItem("cart", JSON.stringify(cart));
-}
-
-function changeQty(index, change) {
-  cart[index].qty += change;
-
-  if (cart[index].qty <= 0) {
-    cart.splice(index, 1);
-  }
-
-  renderCart();
+  cartDiv.innerHTML += `<h3>Total: ₹${total}</h3>`;
 }
 
 function removeItem(index) {
   cart.splice(index, 1);
+  localStorage.setItem("cart", JSON.stringify(cart));
   renderCart();
 }
+
+renderCart();
+
 function confirmOrder() {
   const name = document.getElementById("cname").value;
   const phone = document.getElementById("phone").value;
@@ -147,4 +124,6 @@ saveOrder(orderData);
 
 // Initial render
 renderCart();
+
+
 
