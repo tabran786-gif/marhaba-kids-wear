@@ -1,37 +1,38 @@
 // 🛒 Add Product Function
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("addBtn");
+  btn.addEventListener("click", addProduct);
+});
+
 function addProduct() {
   console.log("Add Product clicked");
 
   const name = document.getElementById("pname").value;
   const price = document.getElementById("price").value;
   const desc = document.getElementById("desc").value;
-  const sizesInput = document.getElementById("sizes").value;
+  const sizes = document.getElementById("sizes").value;
   const imageInput = document.getElementById("image");
 
-  if (!name || !price || !desc || !sizesInput || !imageInput.files[0]) {
-    alert("Please fill all fields");
+  if (!name || !price || !desc || !sizes || !imageInput.files[0]) {
+    alert("Fill all fields");
     return;
   }
 
-  const sizes = sizesInput.split(",");
-
   const reader = new FileReader();
 
-  reader.onload = function () {
+  reader.onload = () => {
     let products = JSON.parse(localStorage.getItem("products")) || [];
 
-    const product = {
+    products.push({
       id: Date.now(),
-      name: name,
-      price: Number(price),
-      desc: desc,
-      sizes: sizes,
+      name,
+      price,
+      desc,
+      sizes: sizes.split(","),
       image: reader.result
-    };
+    });
 
-    products.push(product);
     localStorage.setItem("products", JSON.stringify(products));
-
     alert("✅ Product added successfully");
 
     // Clear form
