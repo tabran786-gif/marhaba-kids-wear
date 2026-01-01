@@ -2,26 +2,26 @@ const productList = document.getElementById("product-list");
 
 firebase.database().ref("products").on("value", snapshot => {
   if (!productList) return;
+productList.innerHTML += `
+  <div class="product-card">
+    <img src="${p.image}">
+    <h3>${p.name}</h3>
+    <p class="desc">${p.desc}</p>
+    <p class="price">₹${p.price}</p>
 
-  productList.innerHTML = "";
+    <select id="size-${id}">
+      ${p.sizes.map(size => `<option value="${size.trim()}">${size.trim()}</option>`).join("")}
+    </select>
 
-  snapshot.forEach(child => {
-    const p = child.val();
-    const id = child.key;
+    <button onclick="addToCart('${id}', '${p.name}', ${p.price}, '${p.image}')">
+      Add to Cart
+    </button>
+  </div>
+`;
 
-    productList.innerHTML += `
-      <div class="product-card">
-        <img src="${p.image}">
-        <h3>${p.name}</h3>
-        <p class="price">₹${p.price}</p>
-      <button onclick="addToCart('1','Kids Dress',499,'img/dress.jpg')">
-  Add to Cart
-</button>
-
-      </div>
-    `;
+ 
   });
-});
+
 
 // 🔥 SINGLE SOURCE OF TRUTH
 function addToCart(id, name, price, image) {
@@ -37,6 +37,7 @@ function addToCart(id, name, price, image) {
       name: name,
       price: Number(price),
       image: image,
+      size: size,
       qty: 1
     });
   }
