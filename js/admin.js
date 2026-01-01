@@ -5,6 +5,9 @@ function addProduct() {
   const nameInput = document.getElementById("name");
   const priceInput = document.getElementById("price");
   const imageInput = document.getElementById("image");
+  const desc = document.getElementById("desc").value;
+const sizes = document.getElementById("sizes").value.split(",");
+
   const msg = document.getElementById("msg");
 
   if (!nameInput || !priceInput || !imageInput) {
