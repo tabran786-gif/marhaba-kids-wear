@@ -14,38 +14,36 @@ firebase.database().ref("products").on("value", snapshot => {
         <img src="${p.image}">
         <h3>${p.name}</h3>
         <p class="price">₹${p.price}</p>
-        <button onclick="addToCart('${id}')">
-          Add to Cart
-        </button>
+      <button onclick="addToCart('1','Kids Dress',499,'img/dress.jpg')">
+  Add to Cart
+</button>
+
       </div>
     `;
   });
 });
 
 // 🔥 SINGLE SOURCE OF TRUTH
-function addToCart(id) {
-  firebase.database().ref("products/" + id).once("value")
-    .then(snapshot => {
-      const p = snapshot.val();
+function addToCart(id, name, price, image) {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const existing = cart.find(item => item.id === id);
 
-      const existing = cart.find(item => item.id === id);
-
-      if (existing) {
-        existing.qty += 1;
-      } else {
-        cart.push({
-          id: id,
-          name: p.name,
-          price: Number(p.price),
-          image: p.image,
-          qty: 1
-        });
-      }
-
-      localStorage.setItem("cart", JSON.stringify(cart));
-      alert("✅ Added to cart");
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    cart.push({
+      id: id,
+      name: name,
+      price: Number(price),
+      image: image,
+      qty: 1
     });
+  }
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+  alert("Added to cart");
 }
+
+
 
