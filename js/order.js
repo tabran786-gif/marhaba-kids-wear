@@ -22,6 +22,8 @@ function renderCart() {
           <h4>${item.name}</h4>
           <p>₹${item.price}</p>
           <p>Qty: ${item.qty}</p>
+          <p>Size: <strong>${item.size}</strong></p>
+
           <button onclick="removeItem(${index})">Remove</button>
         </div>
       </div>
