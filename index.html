@@ -4,63 +4,133 @@
   <meta charset="UTF-8">
   <title>Marhaba Kids Wear | Banswara</title>
 
+  <!-- CSS -->
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 </head>
 <body>
 
-  <header>
-    <h1>🛍️ Marhaba Kids Wear</h1>
-    <p>Nai Abadi, Banswara (RJ)</p>
-    <p>📞 7972174183</p>
-    <script>
-  const customer = JSON.parse(localStorage.getItem("customer"));
+<!-- ================= HEADER ================= -->
+<header class="header">
+  <h1>🛍️ Marhaba Kids Wear</h1>
+  <p>Nai Abadi, Banswara (RJ)</p>
+  <p>📞 7972174183</p>
+
+  <div class="top-buttons">
+    <a href="order.html">
+      <button class="cart-btn">
+        <i class="fa-solid fa-cart-shopping"></i> Cart
+      </button>
+    </a>
+
+    <a href="login.html">
+      <button class="admin-btn">Admin</button>
+    </a>
+  </div>
+</header>
+
+<!-- ================= PRODUCTS ================= -->
+<h2 style="text-align:center">Kids Collection</h2>
+
+<div id="productList" class="products"></div>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <p>© 2026 Marhaba Kids Wear | Developed by <strong>Mohammed Tabran</strong></p>
+</footer>
+
+<!-- ================= FIREBASE v8 ================= -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+<script>
+  // 🔑 Firebase Config (SAME AS ADMIN)
+  const firebaseConfig = {
+   apiKey: "AIzaSyC-LQt9f3q73yAmKpyCuCuYbVqARZ984VU",
+  authDomain: "marhaba-kids-wear.firebaseapp.com",
+  databaseURL: "https://marhaba-kids-wear-default-rtdb.firebaseio.com",
+  projectId: "marhaba-kids-wear",
+  storageBucket: "marhaba-kids-wear.firebasestorage.app",
+  messagingSenderId: "1048025467592",
+  appId: "1:1048025467592:web:8ca02c4791b8f8ac0f73fd"
+  };
+
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
 </script>
 
-<div>
-  <script>
-    if (customer) {
-      document.write(`
-        Welcome, ${customer.name}
-        <button onclick="customerLogout()">Logout</button>
-      `);
-    } else {
-      document.write(`
-        <a href="customer-login.html"><button>Login</button></a>
-        <a href="customer-register.html"><button>Register</button></a>
-      `);
+<!-- ================= PRODUCTS LOGIC ================= -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const productList = document.getElementById("productList");
+
+  firebase.database().ref("products").on("value", function(snapshot) {
+
+    productList.innerHTML = "";
+
+    if (!snapshot.exists()) {
+      productList.innerHTML = "<p>No products available</p>";
+      return;
     }
-  </script>
-</div>
 
-  <a href="order.html">
-  <button class="cart-icon">
-    <i class="fa-solid fa-cart-shopping"></i> View Cart
-  </button>
-</a>
+    snapshot.forEach(function(child) {
+      const p = child.val();
+      const id = child.key;
 
+      productList.innerHTML += `
+        <div class="product-card">
+          <img src="${p.image}" alt="${p.name}">
+          <h3>${p.name}</h3>
+          <p>${p.desc}</p>
+          <strong>₹${p.price}</strong>
 
-  </header>
+          <label>Select Size:</label>
+          <select id="size-${id}">
+            ${p.sizes.map(size => `<option>${size}</option>`).join("")}
+          </select>
 
-  <h2>Kids Collection</h2>
+          <button onclick="addToCart('${id}', '${p.name}', ${p.price}, '${p.image}')">
+            Add to Cart
+          </button>
+        </div>
+      `;
+    });
 
-  <div id="product-list"></div>
+  });
 
-  <!-- Firebase v8 -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+});
 
-  <!-- Your JS -->
-  <script src="js/firebase.js"></script>
-  <script src="js/product.js"></script>
-<footer class="footer">
-  <p>
-    © 2025 Marhaba Kids Wear |
-    Developed by <strong>Mohammed Tabran</strong>
-  </p>
-</footer>
+// 🛒 ADD TO CART
+function addToCart(id, name, price, image) {
+  const sizeSelect = document.getElementById("size-" + id);
+  const selectedSize = sizeSelect ? sizeSelect.value : "";
+
+  if (!selectedSize) {
+    alert("Please select a size");
+    return;
+  }
+
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  cart.push({
+    id: id,
+    name: name,
+    price: price,
+    image: image,
+    size: selectedSize,   // ✅ SIZE SAVED
+    qty: 1
+  });
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+  alert("✅ Product added to cart");
+}
+
+</script>
 
 </body>
 </html>
+
