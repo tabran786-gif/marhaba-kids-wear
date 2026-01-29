@@ -1,4 +1,4 @@
-/ 📝 REGISTER
+// 📝 REGISTER
 function register() {
   const name = document.getElementById("name").value;
   const phone = document.getElementById("phone").value;
@@ -39,3 +39,4 @@ function customerLogout() {
   localStorage.removeItem("customer");
   window.location.href = "customer-login.html";
 }
+
