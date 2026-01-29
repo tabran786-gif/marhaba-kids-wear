@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Orders | Marhaba Kids Wear</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<h2>🧾 My Orders</h2>
+<div id="orders"></div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_DOMAIN",
+    databaseURL: "YOUR_DB_URL",
+    projectId: "YOUR_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+
+  // 👤 Logged-in customer
+  const customer = JSON.parse(localStorage.getItem("customer"));
+
+  if (!customer) {
+    alert("Please login first");
+    window.location.href = "customer-login.html";
+  }
+
+  const ordersBox = document.getElementById("orders");
+
+  firebase.database().ref("orders")
+    .orderByChild("phone")
+    .equalTo(customer.phone)
+    .on("value", snapshot => {
+
+      ordersBox.innerHTML = "";
+
+      if (!snapshot.exists()) {
+        ordersBox.innerHTML = "<p>No orders found</p>";
+        return;
+      }
+
+      snapshot.forEach(child => {
+        const o = child.val();
+
+        let itemsHtml = "";
+        o.items.forEach(i => {
+          itemsHtml += `
+            <li>
+              ${i.name} | Size: ${i.size} | Qty: ${i.qty} | ₹${i.price}
+            </li>`;
+        });
+
+        ordersBox.innerHTML += `
+          <div class="order-card">
+            <h3>Status: ${o.status}</h3>
+            <p><b>Date:</b> ${o.createdAt}</p>
+            <ul>${itemsHtml}</ul>
+            <strong>Total: ₹${o.total}</strong>
+          </div>
+        `;
+      });
+    });
+</script>
+
+</body>
+</html>
