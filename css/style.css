@@ -1,4 +1,4 @@
-/* 🌈 Global */
+* 🌈 Global */
 body {
   margin: 0;
   font-family: 'Segoe UI', Arial, sans-serif;
@@ -10,7 +10,7 @@ body {
 /* 🔝 Header */
 header {
   background: linear-gradient(135deg, #1095aa, #67a2ae);
-  color: white;
+  color: rgb(255, 255, 255);
   padding: 20px;
   animation: slideDown 1s ease;
 }
