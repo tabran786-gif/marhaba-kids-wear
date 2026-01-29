@@ -41,15 +41,17 @@ function removeItem(index) {
 }
 
 renderCart();
-
 function confirmOrder() {
-  const name = document.getElementById("cname").value;
-  const phone = document.getElementById("phone").value;
-  const address = document.getElementById("address").value;
+
+  const name = document.getElementById("cname").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const address = document.getElementById("address").value.trim();
   const payment = document.getElementById("payment").value;
 
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
   if (!name || !phone || !address) {
-    alert("Please fill all details");
+    alert("Please fill all customer details");
     return;
   }
 
@@ -58,74 +60,81 @@ function confirmOrder() {
     return;
   }
 
-  let total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  let total = 0;
+  cart.forEach(i => total += i.price * i.qty);
 
-  // 🧾 Order text
-  let itemsText = cart.map(
-    item => `• ${item.name} x ${item.qty} = ₹${item.price * item.qty}`
-  ).join("%0A");
+  const orderData = {
+    customerName: name,
+    phone: phone,
+    address: address,
+    payment: payment,
+    items: cart,
+    total: total,
+    status: "Pending",
+    createdAt: new Date().toLocaleString()
+  };
 
-  const ownerNumber = "917972174183"; // WhatsApp number
+  // 🧾 PRODUCTS TEXT (WITH SIZE + IMAGE LINK)
+  let itemsText = cart.map(item => {
+    total += item.price * item.qty;
+
+    return `🧸 ${item.name}
+📏 Size: ${item.size}
+🔢 Qty: ${item.qty}
+💰 Price: ₹${item.price * item.qty}
+🖼️ Image: ${item.image}`;
+  }).join("%0A%0A");
+
+  const ownerNumber = "917972174183"; // WhatsApp number (with country code)
+
   const message =
-`🛍️ *New Order - Marhaba Kids Wear*%0A
+`🛍️ *NEW ORDER – Marhaba Kids Wear*%0A
+──────────────────%0A
 👤 Name: ${name}%0A
 📞 Phone: ${phone}%0A
 🏠 Address: ${address}%0A
 💳 Payment: ${payment}%0A
-──────────────%0A
+──────────────────%0A
 ${itemsText}%0A
-──────────────%0A
-💰 Total: ₹${total}`;
+──────────────────%0A
+💰 *Total: ₹${total}*`;
 
+  // 💳 UPI PAYMENT
   if (payment === "UPI") {
-    const upiId = "tabran786@okaxis";
+
+    const upiId = "tabran786@oksbi";
     const note = `Order from ${name}`;
-    const upiUrl = `upi://pay?pa=${upiId}&pn=Marhaba Kids Wear&am=${total}&cu=INR&tn=${encodeURIComponent(note)}`;
 
-    // Save order
-    localStorage.setItem("lastOrder", JSON.stringify({ name, phone, address, cart, total }));
+    const upiUrl =
+      `upi://pay?pa=${upiId}&pn=Marhaba Kids Wear&am=${total}&cu=INR&tn=${encodeURIComponent(note)}`;
 
-    // Open UPI
+    // Save order backup
+    localStorage.setItem("lastOrder", JSON.stringify({
+      name, phone, address, cart, total, payment
+    }));
+
+    // Open UPI App
     window.location.href = upiUrl;
 
-    // After short delay, open WhatsApp
+    // After payment → WhatsApp
     setTimeout(() => {
       window.open(`https://wa.me/${ownerNumber}?text=${message}`, "_blank");
     }, 3000);
 
   } else {
-    // COD
+    // 🚚 CASH ON DELIVERY
     window.open(`https://wa.me/${ownerNumber}?text=${message}`, "_blank");
-
-    alert("Order Confirmed! Our team will contact you.");
-
-    localStorage.removeItem("cart");
-    cart = [];
-    renderCart();
+    alert("✅ Order Confirmed! We will contact you soon.");
   }
-}
-const orderData = {
-  name,
-  phone,
-  address,
-  cart,
-  total,
-  payment,
-  date: new Date().toLocaleString()
-};
 
-saveOrder(orderData);
+  // 🔥 SAVE ORDER FOR CUSTOMER & ADMIN
+  firebase.database().ref("orders").push(orderData);
 
+  alert("✅ Order Confirmed");
 
-
-  // Clear cart after order
   localStorage.removeItem("cart");
-  cart = [];
-  renderCart();
-
-
-// Initial render
-renderCart();
+  window.location.href = "my-orders.html";
+}
 
 
 
