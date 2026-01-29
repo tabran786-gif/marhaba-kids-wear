@@ -5,32 +5,36 @@ function addProduct() {
   const nameInput = document.getElementById("name");
   const priceInput = document.getElementById("price");
   const imageInput = document.getElementById("image");
-  const desc = document.getElementById("desc").value;
-const sizes = document.getElementById("sizes").value.split(",");
-
+  const descInput = document.getElementById("desc");
+  const sizesInput = document.getElementById("sizes");
   const msg = document.getElementById("msg");
 
-  if (!nameInput || !priceInput || !imageInput) {
-    alert("Input fields not found");
+  // Safety check
+  if (!nameInput || !priceInput || !imageInput || !descInput || !sizesInput) {
+    alert("❌ Input fields not found");
     return;
   }
 
   const name = nameInput.value.trim();
   const price = priceInput.value.trim();
+  const desc = descInput.value.trim();
+  const sizes = sizesInput.value.split(",").map(s => s.trim());
   const file = imageInput.files[0];
 
-  if (name === "" || price === "" || !file) {
-    alert("Please fill all fields");
+  if (!name || !price || !desc || sizes.length === 0 || !file) {
+    alert("❌ Please fill all fields");
     return;
   }
 
   const reader = new FileReader();
 
-  reader.onload = function (event) {
+  reader.onload = function (e) {
     const productData = {
       name: name,
       price: price,
-      image: event.target.result,
+      desc: desc,
+      sizes: sizes,
+      image: e.target.result,
       createdAt: Date.now()
     };
 
@@ -39,9 +43,11 @@ const sizes = document.getElementById("sizes").value.split(",");
         msg.innerText = "✅ Product Added Successfully";
         msg.style.color = "green";
 
-        // Clear inputs
+        // Clear form
         nameInput.value = "";
         priceInput.value = "";
+        descInput.value = "";
+        sizesInput.value = "";
         imageInput.value = "";
       })
       .catch((error) => {
@@ -50,9 +56,10 @@ const sizes = document.getElementById("sizes").value.split(",");
         console.error(error);
       });
   };
-
-  reader.readAsDataURL(file);
+reader.readAsDataURL(imageInput.files[0]);
 }
+
+
 // 🔄 Show Products in Admin Panel
 firebase.database().ref("products").on("value", snapshot => {
   const adminList = document.getElementById("adminProducts");
@@ -96,3 +103,39 @@ function deleteProduct(id) {
     firebase.database().ref("products/" + id).remove();
   }
 }
+// 📦 SHOW ORDERS IN ADMIN PANEL
+firebase.database().ref("orders").on("value", snapshot => {
+
+  const table = document.getElementById("ordersTable");
+  if (!table) return;
+
+  table.innerHTML = "";
+
+  let count = 1;
+
+  snapshot.forEach(orderSnap => {
+    const o = orderSnap.val();
+
+    let itemsHtml = "";
+    o.items.forEach(item => {
+      itemsHtml += `
+        ${item.name} <br>
+        Size: ${item.size} | Qty: ${item.qty} <br><br>
+      `;
+    });
+
+    table.innerHTML += `
+      <tr>
+        <td>${count++}</td>
+        <td>${o.customer}</td>
+        <td>${o.phone}</td>
+        <td>${o.address}</td>
+        <td>${itemsHtml}</td>
+        <td>₹${o.total}</td>
+        <td>${o.payment}</td>
+        <td>${o.date}</td>
+      </tr>
+    `;
+  });
+
+});
