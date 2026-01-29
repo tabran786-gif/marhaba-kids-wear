@@ -24,6 +24,9 @@
         <i class="fa-solid fa-cart-shopping"></i> Cart
       </button>
     </a>
+<a href="my-orders.html">
+  <button>My Orders</button>
+</a>
 
     <a href="login.html">
       <button class="admin-btn">Admin</button>
@@ -38,7 +41,7 @@
 
 <!-- ================= FOOTER ================= -->
 <footer class="footer">
-  <p>© 2026 Marhaba Kids Wear | Developed by <strong>Mohammed Tabran</strong></p>
+  <p>© 2025 Marhaba Kids Wear | Developed by <strong>Mohammed Tabran</strong></p>
 </footer>
 
 <!-- ================= FIREBASE v8 ================= -->
@@ -76,29 +79,37 @@ document.addEventListener("DOMContentLoaded", function () {
       productList.innerHTML = "<p>No products available</p>";
       return;
     }
+snapshot.forEach(child => {
+  const p = child.val();
+  const id = child.key;
 
-    snapshot.forEach(function(child) {
-      const p = child.val();
-      const id = child.key;
+  const sizes = p.sizes || [];
 
-      productList.innerHTML += `
-        <div class="product-card">
-          <img src="${p.image}" alt="${p.name}">
-          <h3>${p.name}</h3>
-          <p>${p.desc}</p>
-          <strong>₹${p.price}</strong>
+  productList.innerHTML += `
+    <div class="product-card">
+      <img src="${p.image}" alt="${p.name}">
+      <h3>${p.name}</h3>
+      <p>${p.desc || ""}</p>
+      <strong>₹${p.price}</strong><br>
 
-          <label>Select Size:</label>
-          <select id="size-${id}">
-            ${p.sizes.map(size => `<option>${size}</option>`).join("")}
-          </select>
+      <select id="size-${id}">
+        ${sizes.map(s => `<option>${s}</option>`).join("")}
+      </select>
 
-          <button onclick="addToCart('${id}', '${p.name}', ${p.price}, '${p.image}')">
-            Add to Cart
-          </button>
-        </div>
-      `;
-    });
+      <br><br>
+   <button onclick="addToCart(
+  '${id}',
+  '${p.name}',
+  '${p.price}',
+  '${p.image}'
+)">
+  Add to Cart
+</button>
+
+    </div>
+  `;
+});
+
 
   });
 
@@ -133,4 +144,5 @@ function addToCart(id, name, price, image) {
 
 </body>
 </html>
+
 
